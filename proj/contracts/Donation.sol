@@ -18,6 +18,10 @@ contract Donation{
         require(owner == msg.sender,"Caller is not owner");
         _;
     }
+    modifier onlyPay{
+        require(msg.value > 0,"Not Payment");
+        _;
+    }
 
     function seeAddress() public view returns(address[]memory){
         return addressPay;
@@ -28,9 +32,11 @@ contract Donation{
     }
 
     
-    function donat() external payable{
+    function donat() external onlyPay payable{
         require(msg.sender.balance > msg.value,"No balance");
+        
         addrsee[msg.sender] = msg.value;
+
         bool succes;
         if (addressPay.length > 0){
             for(uint i; i < addressPay.length;i++){
